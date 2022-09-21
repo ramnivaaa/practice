@@ -1,0 +1,28 @@
+.card{
+  background: rgb(209, 224, 108);
+  text-align: center;
+  border: 50px;
+  border-radius: 3px solid red;
+  border-left: 5px;
+  border-right: 5px;
+  padding: 15px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.edit-button{
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+select{
+  width: 150px;
+  height: 30px;
+  border-radius: 2px solid blue;
+  box-sizing: content-box;
+}
+.isCredit{
+  background: rgb(46, 151, 151) !important;
+}
+.isDebit{
+  background: rgb(7, 156, 248) !important;
+}

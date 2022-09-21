@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4 form-group" style="margin-top: 10px;">
+      <label for="usr">Available Balance:</label>
+      <input type="text" [ngModel]="amount" disabled class="form-control" id="usr">
+    </div>
+
+    <div class=" col-md-4" style="margin-top: 37px; text-align: center;">
+      <select name="city" [(ngModel)]="selectedBank"  class="rounded-inputs20 select-select col-md-3" (change)="selected()">
+        <option *ngFor="let bank of bankList"  [ngValue]="bank">{{bank.name}}</option>
+        </select>
+
+    </div>
+    <!-- cash flows -->
+    <div class="col-md-4" style="float: left;">
+      <div class="row" [formGroup]="transferForm" style="margin-top: 10px;">
+        <!-- Amount  -->
+        <div class="col-md-6 form-group">
+          <label for="amount">Amount:</label>
+          <input type="number" class="form-control" id="amount" formControlName="amount">
+        </div>
+        <!--Reason for the Transaction  -->
+        <div class="col-md-6 form-group">
+          <label for="reason">Reason:</label>
+          <input type="text" class="form-control" id="reason" formControlName="reason">
+        </div>
+      </div>
+      <div class="row">
+        <ng-container *ngIf="!isEdit; else edit">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-primary" (click)="creditTransfer()">Credit</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-primary" (click)="debitTransfer()">Debit</button>
+          </div>
+        </ng-container>
+       <ng-template #edit>
+        <button type="button" class="btn btn-success" (click)="save()">Save</button>
+       </ng-template>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="All">
+      <div class="row">
+        <ng-container  *ngFor="let bank of bankTransferDetails">
+          <div class="card col-sm-2 container-fluid" [ngClass]="bank.isCredit ? 'isCredit' : 'isDebit'">
+            <div class="card-header">
+              <div class="col-sm-2" style="float: right;">
+                <button class=" edit-button" (click)="editTransaction(bank)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </div>
+            </div>
+              <div class="card-body">
+                <p> <span>{{bank.reason}}</span></p>
+                <ng-container *ngIf="bank.isCredit; else debit">
+                  <p>Credit : {{bank.creditedAmount}}</p>
+                </ng-container>
+                <ng-template #debit>
+                  <p>Debit : {{bank.debitedAmout}}</p>
+                </ng-template>
+                <p>Balance <span>{{bank.balance}}</span></p>
+                <p>{{bank.date | date}}</p>
+              </div>
+          </div>
+        </ng-container>
+      </div>
+    </mat-tab>
+    <mat-tab label="Spends">
+      <div class="row">
+        <ng-container *ngFor="let bank of bankTransferDetails">
+          <ng-container *ngIf="!bank.isCredit" >
+            <div class="card col-sm-2" [ngClass]="'isDebit'">
+              <div class="card-body">
+                <p><span>{{bank.reason}}</span></p>
+                <p>Debit : {{bank.debitedAmout}}</p>
+                <p>Balance : <span>{{bank.balance}}</span></p>
+                <p> {{bank.date | date}}</p>
+              </div>
+          </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Received">
+      <div class="row">
+        <ng-container *ngFor="let bank of bankTransferDetails">
+          <ng-container *ngIf="bank.isCredit">
+            <div class="card col-sm-2" [ngClass]="'isCredit'">
+              <div class="card-body">
+                <p> <span>{{bank.reason}}</span></p>
+                <p>Credit : {{bank.creditedAmount }}</p>
+                <p>Balance :<span>{{bank.balance}}</span></p>
+                <p> {{bank.date | date}}</p>
+              </div>
+          </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+
